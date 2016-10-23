@@ -1,0 +1,23 @@
+{
+  "name": "virtual_esp8266_device",
+  "version": "1.0.0",
+  "description": "virtual device in Devicehive",
+  "main": "dev.js",
+  "scripts": {
+    "test": "nodejs dev.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MihailLyaskov/virtaul_esp8266_device.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MihailLyaskov/virtaul_esp8266_device/issues"
+  },
+  "homepage": "https://github.com/MihailLyaskov/virtaul_esp8266_device#readme",
+  "dependencies": {
+    "ws": "^1.1.1",
+    "xhr2": "^0.1.3"
+  }
+}
