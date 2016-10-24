@@ -75,12 +75,22 @@ dh.registerDevice(
 	 										console.log("Command updated");
 								});
 								setInterval(function(){
-									dh.sendNotification("uart/int",{"power": Math.floor((Math.random() * 100) + 1)},function(err,res){
-										if(err)
-											console.log(err);
-										else
-											console.log("uart/int notification sent!");
-									});
+									if(relay == "ON"){
+										dh.sendNotification("uart/int",{power: 100},function(err,res){
+											if(err)
+												console.log(err);
+											else
+												console.log("uart/int notification sent!");
+										});
+									}
+									else if(relay == "OFF"){
+										dh.sendNotification("uart/int",{power: 0},function(err,res){
+											if(err)
+												console.log(err);
+											else
+												console.log("uart/int notification sent!");
+										});
+									}
 								},10000);
 							}
 	 					});
