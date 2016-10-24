@@ -43,6 +43,7 @@ dh.registerDevice(
 								console.log('DEVICE SUBSCRIBES TO MASAGES '+JSON.stringify(res));
 	 					},SubCommands);
 	 					var relay = 'OFF';
+	 					var uart_state = 'OFF'; 
 	 					CmdSub.message(function(cmd){
 	 						console.log(cmd);
 	 						if(cmd.command == "gpio/write"){
@@ -68,30 +69,40 @@ dh.registerDevice(
 									}
 							}
 							if(cmd.command == 'uart/int'){
-								cmd.update({"command":"uart/int","status":"OK","result":{"message":"Start sending data!"}},function(err,res){
-	 									if(err)
-	 										console.log(err);
-	 									else
-	 										console.log("Command updated");
-								});
-								setInterval(function(){
-									if(relay == "ON"){
-										dh.sendNotification("uart/int",{power: 100},function(err,res){
-											if(err)
-												console.log(err);
-											else
-												console.log("uart/int notification sent!");
-										});
-									}
-									else if(relay == "OFF"){
-										dh.sendNotification("uart/int",{power: 0},function(err,res){
-											if(err)
-												console.log(err);
-											else
-												console.log("uart/int notification sent!");
-										});
-									}
-								},10000);
+								if(uart_state == 'OFF'){
+									uart_state = 'ON'; 
+									cmd.update({"command":"uart/int","status":"OK","result":{"message":"Start sending data!"}},function(err,res){
+	 										if(err)
+	 											console.log(err);
+	 										else
+	 											console.log("Command updated");
+									});
+									setInterval(function(){
+										if(relay == "ON"){
+											dh.sendNotification("uart/int",{power: 100},function(err,res){
+												if(err)
+													console.log(err);
+												else
+													console.log("uart/int notification sent!");
+											});
+										}
+										else if(relay == "OFF"){
+											dh.sendNotification("uart/int",{power: 0},function(err,res){
+												if(err)
+													console.log(err);
+												else
+													console.log("uart/int notification sent!");
+											});
+										}
+									},10000);
+								}
+								else if(uart_state == 'ON')
+									cmd.update({"command":"uart/int","status":"OK","result":{"message":"UART is already sending data!"}},function(err,res){
+	 										if(err)
+	 											console.log(err);
+	 										else
+	 											console.log("Command updated");
+									});
 							}
 	 					});
 	    			}
