@@ -2,8 +2,14 @@ global.WebSocket = require('ws');
 global.XMLHttpRequest = require('xhr2');
 var DeviceHive = require('./devicehive.device');
 
-
-
+var data = {
+    power: 100,
+    energy: 100 / 60
+}
+var data2 = {
+    power: 0,
+    energy: 0
+}
 
 var dh = new DeviceHive("http://playground.devicehive.com/api/rest", "virtual_esp8266", "FsJCDRAbjTO+5GA8b0nydWJvtHl4Nwc4wZqHnqM/+Gk=");
 
@@ -42,7 +48,7 @@ dh.registerDevice({
                     var relay = 'OFF';
                     var uart_state = 'OFF';
                     CmdSub.message(function(cmd) {
-                        console.log(cmd);
+                        //console.log(cmd);
                         if (cmd.command == "gpio/write") {
                             if (relay == "OFF") {
                                 relay = "ON";
@@ -93,27 +99,21 @@ dh.registerDevice({
                                 });
                                 setInterval(function() {
                                     if (relay == "ON") {
-                                        dh.sendNotification("uart/int", {
-                                            power: 100,
-                                            energy: 100 / 60
-                                        }, function(err, res) {
+                                        dh.sendNotification("uart/int", data, function(err, res) {
                                             if (err)
                                                 console.log(err);
                                             else
                                                 console.log("uart/int notification sent!");
                                         });
                                     } else if (relay == "OFF") {
-                                        dh.sendNotification("uart/int", {
-                                            power: 0,
-                                            energy: 0
-                                        }, function(err, res) {
+                                        dh.sendNotification("uart/int", data2, function(err, res) {
                                             if (err)
                                                 console.log(err);
                                             else
                                                 console.log("uart/int notification sent!");
                                         });
                                     }
-                                }, 60000);
+                                }, 5000);
                             } else if (uart_state == 'ON')
                                 cmd.update({
                                     "command": "uart/int",
